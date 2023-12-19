@@ -98,13 +98,6 @@ MNIST 数据集 (Mixed National Institute of Standards and Technology database) 
 
 一般给出的 MNIST 数据集下载链接为 http://yann.lecun.com/exdb/mnist/index.html，然而目前需要登录验证。建议使用 4.1.1 中 torchvision.datasets 的方法准备该数据集。 
 
-```python
-# DATA_PATH: where you want to place your dataset
-from torchvision import datasets
-MNIST_train = datasets.MNIST(DATA_PATH, train=True, download=True, transform=transform)
-MNIST_test = datasets.MNIST(DATA_PATH, train=False, download=True, transform=transform)
-```
-
 #### [Carvana 数据集](https://www.kaggle.com/competitions/carvana-image-masking-challenge/data)
 
 !!! warning "To be completed"
