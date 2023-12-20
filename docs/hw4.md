@@ -2,7 +2,7 @@
 
 # HW4: Learning CNN
 
-!!! warning "U-Net 部分还未正式发布，内容随时和评分标准随时可能会更改"
+!!! warning "U-Net 部分还未正式发布，内容和评分标准随时可能会更改"
 
 ## 实验简介
 
@@ -12,7 +12,7 @@
 本次实验我们将完成
 
 1. LeNet-5 的训练，应用于 MNIST 数据集上的手写数字识别任务（图像分类）
-2. UNet 的网络补全与测试，应用于 [Carvana 数据集](https://www.kaggle.com/competitions/carvana-image-masking-challenge/data)上的掩码 (Mask) 预测任务（语义分割）
+2. U-Net 的网络补全与测试，应用于 [Carvana 数据集](https://www.kaggle.com/competitions/carvana-image-masking-challenge/data)上的掩码 (Mask) 预测任务（语义分割）
 
 ## 实验环境
 
@@ -410,11 +410,9 @@ Model loaded
 
 则说明你的网络补全正确。当然，第一二行的输出不同情况可能不同，我们关注的重心在于第三行输出 "Model loaded"。
 
-#### Bonus: 单图推断测试
+#### 单图推断测试
 
-如果能够利用模型对所提供的[单张汽车图片](../graph/infer.jpg)的 mask 进行推断，将会得到一定的 bonus。
-
-对于有时间、感兴趣的同学，有如下的关键点：
+要求加载提供的模型 `model.pth`，对提供的[单张汽车图片](../graph/infer.jpg)的 mask 进行推断，有如下的关键点：
 
 - 使用 `Image.open()` 读入的单张图片需要利用 `torchvision.transforms` 进行适当的预处理。
     - Resize 为 572
@@ -459,13 +457,12 @@ def plot_img_and_mask(img, mask, filename):
 2. U-Net：
       1. 提供的文件：[unet.py](../code/unet.py)、[try.py](../code/try.py)、[infer.jpg](../graph/infer.jpg)，model.pth 可以从[学在浙大](https://courses.zju.edu.cn)或钉钉群下载
       2. 补全 `unet.py` 中的 `TODO`，使得所提供的训练好的模型可以被正确加载
-      3. (bonus) 利用模型对单张汽车图片的 mask 进行推断
+      3. 利用所提供的模型，推断[所提供的单张汽车图片](../graph/infer.jpg)的 mask
 3. 作为一个探索，本次作业分数构成按如下划分：
-      1. LeNet 基本要求：60
-      2. U-Net 基本要求：35
+      1. LeNet 基本要求：50
+      2. U-Net 基本要求：50
       3. LeNet bonus：5
-      4. U-Net bonus：5
-      5. 总分为该四部分之和，100 分封顶
+      4. 总分为该三部分之和，100 分封顶
 4. 你需要提交：
     1. 全部代码
     2. 实验报告，除了模板要求之外，还需要包含：
