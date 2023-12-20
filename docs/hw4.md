@@ -2,6 +2,8 @@
 
 # HW4: Learning CNN
 
+!!! warning "U-Net 部分还未正式发布，内容随时和评分标准随时可能会更改"
+
 ## 实验简介
 
 - **深度学习**（Deep Learning）：[机器学习](https://zh.wikipedia.org/wiki/机器学习)的分支，是一种以[人工神经网络](https://zh.wikipedia.org/wiki/人工神经网络)为架构，对数据进行表征学习的[算法](https://zh.wikipedia.org/wiki/算法)
@@ -273,7 +275,7 @@ with torch.no_grad():
 
 #### 网络补全
 
-要求完成 `unet.py` 中全部的 `TODO`，使得所提供的训练好的模型可以被正确加载。
+要求完成 [unet.py](../code/unet.py) 中全部的 `TODO`，使得所提供的训练好的模型可以被正确加载。
 
 整体上来看，需要完成的内容为 `UNet` 类 `__init__` 中部分卷积层的定义，以及 `forward` 函数中的 Contracting Path 和 Expanding Path 的前递。不过，`UNet` 类 `__init__` 补全过程中还需要实现 `CropAndConcat` 类。
 
@@ -319,7 +321,7 @@ class UNet(nn.Module):
 
 ##### `__init__` 中的卷积层定义
 
-- 通道数的变化已经在前面的图中进行了标注。**和原论文不同，final_conv 的输出通道改成了 1。**
+- 通道数的变化已经在前面的图中进行了标注。和原论文不同，训练时 final_conv 的输出通道改成了 1，但是在通用的网络结构中就是 `out_channels`
 - down_conv, mid_conv 和 up_conv 都是由两个卷积层组成，每个卷积层都是 $3\times 3$ 的卷积核，padding 为 $1$，stride 为 $1$。每个卷积层后都有一个 ReLU 激活函数，整体顺序为 Conv2d-Relu-Conv2d-Relu
 - final_conv 是一个 $1\times 1$ 的卷积层，padding 为 $0$，stride 为 $1$，没有激活函数
 
@@ -363,7 +365,7 @@ class CropAndConcat(nn.Module):
         return x
 ```
 
-##### `forward` 的实现
+##### `UNet` 类中 `forward` 的实现
 
 前面如果都实现正确，这里是比较简单的，相当于对着图连线。注意在 Contracting Path 中保留中间结果，在 Expanding Path 中 Crop and Concat 时可以使用。
 
