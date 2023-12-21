@@ -461,7 +461,7 @@ def plot_img_and_mask(img, mask, filename):
       2. U-Net 基本要求：50
       3. LeNet bonus：5
       4. 总分为该三部分之和，100 分封顶
-4. **截止时间：2023 年 1 月 2 日上午**，详见[学在浙大](https://courses.zju.edu.cn)
+4. **截止时间：2024 年 1 月 2 日上午**，详见[学在浙大](https://courses.zju.edu.cn)
 5. 你需要提交：
     1. 全部代码
     2. 实验报告，除了模板要求之外，还需要包含：
