@@ -273,11 +273,11 @@ with torch.no_grad():
 
 #### 网络补全
 
-要求完成 [unet.py](../code/unet.py) 中全部的 `TODO`，使得所提供的训练好的模型可以被正确加载。
+要求完成 [unet.py](code/unet.py) 中全部的 `TODO`，使得所提供的训练好的模型可以被正确加载。
 
 整体上来看，需要完成的内容为 `UNet` 类 `__init__` 中部分卷积层的定义，以及 `forward` 函数中的 Contracting Path 和 Expanding Path 的前递。不过，`UNet` 类 `__init__` 补全过程中还需要实现 `CropAndConcat` 类。
 
-!!! warning "以下代码只是展示一个框架便于纵观全部内容，请点击文档中 [unet.py](../code/unet.py) 文字所对应的链接下载包含更多提示的模板进行网络补全"
+!!! warning "以下代码只是展示一个框架便于纵观全部内容，请点击文档中 [unet.py](code/unet.py) 文字所对应的链接下载包含更多提示的模板进行网络补全"
 
 ```python
 class UNet(nn.Module):
@@ -412,7 +412,7 @@ Model loaded
 
 #### 单图推断测试
 
-要求加载提供的模型 `model.pth`，对提供的[单张汽车图片](../graph/infer.jpg)的 mask 进行推断，有如下的关键点：
+要求加载提供的模型 `model.pth`，对提供的[单张汽车图片](graph/infer.jpg)的 mask 进行推断，有如下的关键点：
 
 - 使用 `Image.open()` 读入的单张图片需要利用 `torchvision.transforms` 进行适当的预处理。
     - Resize 为 572
@@ -455,9 +455,9 @@ def plot_img_and_mask(img, mask, filename):
       3. 由于 LeNet-5 太过经典、参考资料过多，代码的清晰程度和适当的原创注释也将是基本评分项
       4. (bonus) 对超参、优化器、网络结构等进行**有意义**的探索实验，将给予适当的 bonus。不鼓励无意义的内卷堆实验，评分时将酌情考虑。
 2. U-Net：
-      1. 提供的文件：[unet.py](../code/unet.py)、[try.py](../code/try.py)、[infer.jpg](../graph/infer.jpg)，model.pth 可以从[学在浙大](https://courses.zju.edu.cn)或钉钉群下载
-      2. 补全 [unet.py](../code/unet.py) 中的 `TODO`，使得所提供的训练好的模型可以被正确加载
-      3. 利用所提供的模型，推断所提供的单张汽车图片([infer.jpg](../graph/infer.jpg))的 mask
+      1. 提供的文件：[unet.py](code/unet.py)、[try.py](code/try.py)、[infer.jpg](graph/infer.jpg)，model.pth 可以从[学在浙大](https://courses.zju.edu.cn)或钉钉群下载
+      2. 补全 [unet.py](code/unet.py) 中的 `TODO`，使得所提供的训练好的模型可以被正确加载
+      3. 利用所提供的模型，推断所提供的单张汽车图片([infer.jpg](graph/infer.jpg))的 mask
 3. 作为一个探索，本次作业分数构成按如下划分：
       1. LeNet 基本要求：50
       2. U-Net 基本要求：50
@@ -469,7 +469,7 @@ def plot_img_and_mask(img, mask, filename):
     2. 实验报告，除了模板要求之外，还需要包含：
         1. 对于 LeNet-5，给出**模型的损失曲线、识别准确率曲线**等图表。可以利用 tensorboard 可视化训练过程并直接在其中截图，可以参考 [PyTorch](https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html) 的官方教程完成配置。
         2. 对于 LeNet-5，你需要写明测试集上的**识别正确率**
-        3. 对于 U-Net，给出 `plot_img_and_mask` 函数生成的图片 ([infer.jpg](../graph/infer.jpg) 和所预测的 mask)
+        3. 对于 U-Net，给出 `plot_img_and_mask` 函数生成的图片 ([infer.jpg](graph/infer.jpg) 和所预测的 mask)
         4. U-Net 是原创实验，欢迎在报告感想部分提供反馈
     3. 代码应单独打包为压缩文件，命名为 `学号-姓名-CVHW4` 的格式。实验报告应当单独上传附件，保证可以在网页直接打开实验报告进行预览，命名任意。
 
