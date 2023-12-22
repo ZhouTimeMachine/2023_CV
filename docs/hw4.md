@@ -277,6 +277,8 @@ with torch.no_grad():
 
 整体上来看，需要完成的内容为 `UNet` 类 `__init__` 中部分卷积层的定义，以及 `forward` 函数中的 Contracting Path 和 Expanding Path 的前递。不过，`UNet` 类 `__init__` 补全过程中还需要实现 `CropAndConcat` 类。
 
+!!! warning "以下代码只是展示一个框架便于纵观全部内容，请点击文档中 [unet.py](../code/unet.py) 文字所对应的链接下载包含更多提示的模板进行网络补全"
+
 ```python
 class UNet(nn.Module):
     def __init__(self, in_channels: int, out_channels: int):
