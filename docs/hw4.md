@@ -338,6 +338,7 @@ class UNet(nn.Module):
     - `h`：height
     - `w`：width
 - 请自行搜索查找 `torch.cat()` 的用法，使得能符合原论文中的拼接方式
+- 与图中相反，实际拼接的顺序为 Expanding Path 中的 feature map 在左，Contracting Path 中的feature map 在右
 - 这里的代码量非常小，基本两三行，不要写复杂了
 
 
