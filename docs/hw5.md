@@ -39,6 +39,8 @@
 
 数据增广 (data augmentation) 是在当前有限的图像数据集的基础上增加数据量的一种方法，常见的数据增广方法是对原始的图像进行仿射变换而标签不变，另外像取 patch 也是一种常见的数据增广方式。更多数据增广的方法有待探索。
 
+可以参考 [Dive into Deep Learning - Image Augmentation](https://d2l.ai/chapter_computer-vision/image-augmentation.html) 学习数据增广的使用。
+
 ## 实验设置
 
 ### 参考案例
@@ -100,3 +102,4 @@
 
 - [Pokemon Image Dataset](https://www.kaggle.com/datasets/vishalsubbiah/pokemon-images-and-types/data)
 - 参考案例仓库 [pokemon-types](https://github.com/rshnn/pokemon-types)
+- [Dive into Deep Learning - Image Augmentation](https://d2l.ai/chapter_computer-vision/image-augmentation.html)
