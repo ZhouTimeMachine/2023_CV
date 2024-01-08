@@ -8,3 +8,4 @@
 
 - [OpenCV](opencv.md): OpenCV C++ 或 opencv-python 的安装和使用
 - [HW4: Learning CNN](hw4.md): 第四次作业的说明
+- [HW5: Learning CNN++](hw5.md): 第五次作业的说明

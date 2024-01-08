@@ -10,6 +10,7 @@ nav:
   - Home: index.md
   - OpenCV Environment: opencv.md
   - HW4 Learning CNN: hw4.md
+  - HW5 Learning CNN++: hw5.md
 
 theme:
   name: material
