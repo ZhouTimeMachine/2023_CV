@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zh">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="浙江大学 2023 冬《计算机视觉》课程网站" name="description"/>
+<link href="https://zhoutimemachine.github.io/2023_CV/hw4/" rel="canonical"/>
+<link href="../opencv/" rel="prev"/>
+<link href="../hw5/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.6.4" name="generator"/>
+<title>HW4 Learning CNN - ZJU CV 2023 Winter</title>
+<link href="../assets/stylesheets/main.8608ea7d.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../css/heti.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/katex.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:500,500i,600,600i&amp;display=fallback" rel="stylesheet"/>
+<link href="../css/custom.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#hw4-learning-cnn">
+          跳转至
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="页眉" class="md-header__inner md-grid">
+<a aria-label="ZJU CV 2023 Winter" class="md-header__button md-logo" data-md-component="logo" href=".." title="ZJU CV 2023 Winter">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            ZJU CV 2023 Winter
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              HW4 Learning CNN
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="夜间模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: light)" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="夜间模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"></path></svg>
+</label>
+<input aria-label="日间模式" class="md-option" data-md-color-accent="indigo" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-primary="teal" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="日间模式">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="搜索" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="搜索" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="查找" class="md-search__options">
+<button aria-label="清空当前内容" class="md-search__icon md-icon" tabindex="-1" title="清空当前内容" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/ZhouTimeMachine/2023_CV/" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"></path></svg>
+</div>
+<div class="md-source__repository">
+    ZTM/2023_CV
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="导航栏" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="ZJU CV 2023 Winter" class="md-nav__button md-logo" data-md-component="logo" href=".." title="ZJU CV 2023 Winter">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    ZJU CV 2023 Winter
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/ZhouTimeMachine/2023_CV/" title="前往仓库">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"></path></svg>
+</div>
+<div class="md-source__repository">
+    ZTM/2023_CV
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    Home
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../opencv/">
+<span class="md-ellipsis">
+    OpenCV Environment
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    HW4 Learning CNN
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    HW4 Learning CNN
+    
+  </span>
+</a>
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      实验简介
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      实验环境
+    </span>
+</a>
+<nav aria-label="实验环境" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conda">
+<span class="md-ellipsis">
+      安装 conda
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conda_1">
+<span class="md-ellipsis">
+      新建 conda 环境
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      实验基础知识介绍
+    </span>
+</a>
+<nav aria-label="实验基础知识介绍" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      网络模型
+    </span>
+</a>
+<nav aria-label="网络模型" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cnn">
+<span class="md-ellipsis">
+      CNN
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lenet-5">
+<span class="md-ellipsis">
+      LeNet-5
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#u-net">
+<span class="md-ellipsis">
+      U-Net
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      数据集
+    </span>
+</a>
+<nav aria-label="数据集" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mnist">
+<span class="md-ellipsis">
+      MNIST 手写数字数据集
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#carvana">
+<span class="md-ellipsis">
+      Carvana 数据集
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      实验步骤
+    </span>
+</a>
+<nav aria-label="实验步骤" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lenet-5_1">
+<span class="md-ellipsis">
+      LeNet-5 训练
+    </span>
+</a>
+<nav aria-label="LeNet-5 训练" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      数据准备
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      模型编写
+    </span>
+</a>
+<nav aria-label="模型编写" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      网络结构
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      损失函数
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+<span class="md-ellipsis">
+      正向传播
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+<span class="md-ellipsis">
+      反向传播
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+<span class="md-ellipsis">
+      优化器
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+<span class="md-ellipsis">
+      训练过程
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+<span class="md-ellipsis">
+      测试过程
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tips">
+<span class="md-ellipsis">
+      Tips
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#u-net_1">
+<span class="md-ellipsis">
+      U-Net 补全与测试
+    </span>
+</a>
+<nav aria-label="U-Net 补全与测试" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#u-net_2">
+<span class="md-ellipsis">
+      U-Net 结构解读
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+<span class="md-ellipsis">
+      网络补全
+    </span>
+</a>
+<nav aria-label="网络补全" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#__init__">
+<span class="md-ellipsis">
+      __init__ 中的卷积层定义
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cropandconcat">
+<span class="md-ellipsis">
+      CropAndConcat 类的实现
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unet-forward">
+<span class="md-ellipsis">
+      UNet 类中 forward 的实现
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+<span class="md-ellipsis">
+      模型加载测试
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+<span class="md-ellipsis">
+      单图推断测试
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+<span class="md-ellipsis">
+      实验任务与要求
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+<span class="md-ellipsis">
+      参考资料
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acknowledgement">
+<span class="md-ellipsis">
+      Acknowledgement
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hw5/">
+<span class="md-ellipsis">
+    HW5 Learning CNN++
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="目录" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+<span class="md-ellipsis">
+      实验简介
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+<span class="md-ellipsis">
+      实验环境
+    </span>
+</a>
+<nav aria-label="实验环境" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conda">
+<span class="md-ellipsis">
+      安装 conda
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#conda_1">
+<span class="md-ellipsis">
+      新建 conda 环境
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+<span class="md-ellipsis">
+      实验基础知识介绍
+    </span>
+</a>
+<nav aria-label="实验基础知识介绍" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+<span class="md-ellipsis">
+      网络模型
+    </span>
+</a>
+<nav aria-label="网络模型" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cnn">
+<span class="md-ellipsis">
+      CNN
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lenet-5">
+<span class="md-ellipsis">
+      LeNet-5
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#u-net">
+<span class="md-ellipsis">
+      U-Net
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+<span class="md-ellipsis">
+      数据集
+    </span>
+</a>
+<nav aria-label="数据集" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mnist">
+<span class="md-ellipsis">
+      MNIST 手写数字数据集
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#carvana">
+<span class="md-ellipsis">
+      Carvana 数据集
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+<span class="md-ellipsis">
+      实验步骤
+    </span>
+</a>
+<nav aria-label="实验步骤" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#lenet-5_1">
+<span class="md-ellipsis">
+      LeNet-5 训练
+    </span>
+</a>
+<nav aria-label="LeNet-5 训练" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+<span class="md-ellipsis">
+      数据准备
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+<span class="md-ellipsis">
+      模型编写
+    </span>
+</a>
+<nav aria-label="模型编写" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_9">
+<span class="md-ellipsis">
+      网络结构
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_10">
+<span class="md-ellipsis">
+      损失函数
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_11">
+<span class="md-ellipsis">
+      正向传播
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_12">
+<span class="md-ellipsis">
+      反向传播
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_13">
+<span class="md-ellipsis">
+      优化器
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_14">
+<span class="md-ellipsis">
+      训练过程
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_15">
+<span class="md-ellipsis">
+      测试过程
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tips">
+<span class="md-ellipsis">
+      Tips
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#u-net_1">
+<span class="md-ellipsis">
+      U-Net 补全与测试
+    </span>
+</a>
+<nav aria-label="U-Net 补全与测试" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#u-net_2">
+<span class="md-ellipsis">
+      U-Net 结构解读
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_16">
+<span class="md-ellipsis">
+      网络补全
+    </span>
+</a>
+<nav aria-label="网络补全" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#__init__">
+<span class="md-ellipsis">
+      __init__ 中的卷积层定义
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cropandconcat">
+<span class="md-ellipsis">
+      CropAndConcat 类的实现
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#unet-forward">
+<span class="md-ellipsis">
+      UNet 类中 forward 的实现
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_17">
+<span class="md-ellipsis">
+      模型加载测试
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_18">
+<span class="md-ellipsis">
+      单图推断测试
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_19">
+<span class="md-ellipsis">
+      实验任务与要求
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_20">
+<span class="md-ellipsis">
+      参考资料
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#acknowledgement">
+<span class="md-ellipsis">
+      Acknowledgement
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<p><link href="../css/counter.css" rel="stylesheet"/></p>
+<h1 id="hw4-learning-cnn">HW4: Learning CNN</h1>
+<h2 id="_1">实验简介</h2>
+<ul>
+<li><strong>深度学习</strong>（Deep Learning<heti-adjacent class="heti-adjacent-half">）</heti-adjacent>：<a href="https://zh.wikipedia.org/wiki/机器学习">机器学习</a>的分支，是一种以<a href="https://zh.wikipedia.org/wiki/人工神经网络">人工神经网络</a>为架构，对数据进行表征学习的<a href="https://zh.wikipedia.org/wiki/算法">算法</a></li>
+<li><strong>卷积神经网络</strong>（Convolutional Neural Network, <strong>CNN</strong><heti-adjacent class="heti-adjacent-half">）</heti-adjacent>：一种<a href="https://zh.wikipedia.org/wiki/前馈神经网络">前馈神经网络</a>，对于大型图像处理有出色表现</li>
+</ul>
+<p>本次实验我们将完成</p>
+<ol>
+<li><span>LeNet-5<span class="heti-spacing"> </span></span>的训练，应用于<span class="heti-skip"><span class="heti-spacing"> </span>MNIST<span class="heti-spacing"> </span></span>数据集上的手写数字识别任务（图像分类）</li>
+<li><span>U-Net<span class="heti-spacing"> </span></span>的网络补全与测试，应用于<a href="https://www.kaggle.com/competitions/carvana-image-masking-challenge/data"><span class="heti-skip"><span class="heti-spacing"> </span>Carvana<span class="heti-spacing"> </span></span>数据集</a>上的掩码<span class="heti-skip"><span class="heti-spacing"> </span>(Mask)<span class="heti-spacing"> </span></span>预测任务（语义分割）</li>
+</ol>
+<h2 id="_2">实验环境</h2>
+<p>要求使用<span class="heti-skip"><span class="heti-spacing"> </span>python + pytorch<span class="heti-spacing"> </span></span>完成实验，推荐使用<span class="heti-skip"><span class="heti-spacing"> </span>miniconda<span class="heti-spacing"> </span></span>或者<span class="heti-skip"><span class="heti-spacing"> </span>anaconda<span class="heti-spacing"> </span></span>管理环境。</p>
+<h3 id="conda">安装<span><span class="heti-spacing"> </span>conda</span></h3>
+<p>用<span class="heti-skip"><span class="heti-spacing"> </span>conda<span class="heti-spacing"> </span></span>管理环境是因为你可能要用<span class="heti-skip"><span class="heti-spacing"> </span>python<span class="heti-spacing"> </span></span>完成多个项目，有的项目的环境之间可能存在难以解决甚至无法解决的冲突。<span>conda<span class="heti-spacing"> </span></span>可以帮助你在同一台机子的同一个账户下创建和管理多个<span class="heti-skip"><span class="heti-spacing"> </span>python<span class="heti-spacing"> </span></span>环境，各个环境相互独立，不会相互影响；而且每个环境封装在一个文件夹中，克隆、移除都很方便。</p>
+<p><span>Anaconda<span class="heti-spacing"> </span></span>完全包含了<span><span class="heti-spacing"> </span>miniconda</span>，预装了许多内容，也提供图形化功能。相比之下<span class="heti-skip"><span class="heti-spacing"> </span>miniconda<span class="heti-spacing"> </span></span>比较轻量级，只提供<span class="heti-skip"><span class="heti-spacing"> </span>python<span class="heti-spacing"> </span></span>和<span class="heti-skip"><span class="heti-spacing"> </span>conda<span class="heti-spacing"> </span></span>功能。相较之下更推荐使用<span><span class="heti-spacing"> </span>miniconda</span>，可以在<a href="https://docs.conda.io/projects/miniconda/en/latest/miniconda-other-installer-links.html"><span class="heti-skip"><span class="heti-spacing"> </span>Latest Miniconda installer links by Python version<span class="heti-spacing"> </span></span></a>下载安装最新版的<span><span class="heti-spacing"> </span>miniconda</span>。</p>
+<p><span>Windows<span class="heti-spacing"> </span></span>的<span class="heti-skip"><span class="heti-spacing"> </span>conda<span class="heti-spacing"> </span></span>环境配置比较麻烦，需要大家各自搜索解决环境问题，可以适当参考<a href="https://zhuanlan.zhihu.com/p/591091259">这篇知乎文章</a>。另一种解决方案是使用<span><span class="heti-spacing"> </span>WSL</span>，如果需要可以参考本人在另一门课程写的<a href="https://zhoutimemachine.github.io/2023_FPA/env/windows_lost/#wsl">教程</a>进行安装。</p>
+<h3 id="conda_1">新建<span class="heti-skip"><span class="heti-spacing"> </span>conda<span class="heti-spacing"> </span></span>环境</h3>
+<p><span>conda<span class="heti-spacing"> </span></span>默认环境为<span><span class="heti-spacing"> </span>base</span>，如果做什么都使用这个环境，很容易导致环境混乱。</p>
+<p>先为自己要使用的环境起一个名字，例如<span><span class="heti-spacing"> </span>cv</span>。下面的命令可以创建一个名为<span><span class="heti-spacing"> </span>cv</span>，<span>python<span class="heti-spacing"> </span></span>版本为<span class="heti-skip"><span class="heti-spacing"> </span>3.10<span class="heti-spacing"> </span></span>的环境。</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a>conda<span class="w"> </span>create<span class="w"> </span>cv<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.10
+</span></code></pre></div></td></tr></table></div>
+<p><span>conda<span class="heti-spacing"> </span></span>默认环境为<span><span class="heti-spacing"> </span>base</span>，需要激活新建的环境才能使用。</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a>conda<span class="w"> </span>activate<span class="w"> </span>cv
+</span></code></pre></div></td></tr></table></div>
+<p>随后就可以使用<span class="heti-skip"><span class="heti-spacing"> </span>conda<span class="heti-spacing"> </span></span>或者<span class="heti-skip"><span class="heti-spacing"> </span>pip<span class="heti-spacing"> </span></span>安装所需要的包了。例如<span><span class="heti-spacing"> </span>Pytorch</span>，可以通过<a href="https://pytorch.org/"><span class="heti-skip"><span class="heti-spacing"> </span>PyTorch<span class="heti-spacing"> </span></span>官网</a>找到对应的安装命令。</p>
+<p>例如，<span>Stable (2.1.2) - Windows - Pip - Python - CPU<span class="heti-spacing"> </span></span>对应的<span class="heti-skip"><span class="heti-spacing"> </span>Pytorch<span class="heti-spacing"> </span></span>安装命令为</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a>pip3<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio
+</span></code></pre></div></td></tr></table></div>
+<h2 id="_3">实验基础知识介绍</h2>
+<h3 id="_4">网络模型</h3>
+<h4 id="cnn">CNN</h4>
+<p><span>CNN<span class="heti-spacing"> </span></span>由一个或多个卷积层和末尾的全连接层（对应经典的神经网络）组成，同时也包括关联权重和池化层（pooling layer<heti-adjacent class="heti-adjacent-half">）</heti-adjacent>。</p>
+<p><span>CNN<span class="heti-spacing"> </span></span>的特点包括</p>
+<ul>
+<li><strong>局部连接</strong>：卷积层的输出中的单个元素只取决于输入<span class="heti-skip"><span class="heti-spacing"> </span>feature map<span class="heti-spacing"> </span></span>中的局部区域</li>
+<li><strong>权值共享</strong>：在输入<span class="heti-skip"><span class="heti-spacing"> </span>feature map<span class="heti-spacing"> </span></span>的不同位置使用相同的参数（同一卷积核）</li>
+</ul>
+<p>这些特点使其参数量大大减少，且对局部的空间特征具有很好的提取作用。</p>
+<p>与其他深度学习结构相比，卷积神经网络在图像和<a href="https://zh.wikipedia.org/wiki/语音识别">语音识别</a>方面能够给出更好的结果。这一模型也可以使用<a href="https://zh.wikipedia.org/wiki/反向传播算法">反向传播算法</a>进行训练，相比较其他深度、前馈神经网络，卷积神经网络需要考量的参数更少，使之成为一种颇具吸引力的深度学习结构。</p>
+<h4 id="lenet-5">LeNet-5</h4>
+<p><span>LeNet-5<span class="heti-spacing"> </span></span>是一个简单的经典<span><span class="heti-spacing"> </span>CNN</span>，可以称之为<span class="heti-skip"><span class="heti-spacing"> </span>CNN<span class="heti-spacing"> </span></span>中的<span><span class="heti-spacing"> </span>"Hello World"</span>。下图显示了其结构：输入的二维图像，先经过两次卷积层到池化层，再经过全连接层，最后输出每种分类预测得到的概率。</p>
+<div style="text-align:center;">
+<img alt="How to Train a Model with MNIST dataset | by Abdullah Furkan Özbek | Medium" src="../graph/LeNet.jpg" style="margin: 0 auto;"/>
+</div>
+<p>有关于其更详细的结构可以在<span class="heti-skip"><span class="heti-spacing"> </span>LeNet<span class="heti-spacing"> </span></span>原论文<a href="https://ieeexplore.ieee.org/abstract/document/726791"><span class="heti-skip"><span class="heti-spacing"> </span>Gradient-based learning applied to document recognition<span class="heti-spacing"> </span></span></a>中找到。</p>
+<h4 id="u-net">U-Net</h4>
+<p><a href="https://en.wikipedia.org/wiki/U-Net"><span>U-Net<span class="heti-spacing"> </span></span></a>是一个经典的语义分割全卷积网络，最初应用于医疗图像的分割任务。其网络结构如下图所示，可以看到<span class="heti-skip"><span class="heti-spacing"> </span>U-Net<span class="heti-spacing"> </span></span>有一个对称的结构，左边是一个典型的卷积神经网络，右边是一个对称的上采样网络，可以将左边的特征图恢复到原图大小。</p>
+<div style="text-align:center;">
+<img alt="U-Net Structure" src="../graph/U-Net.png" style="margin: 0 auto;"/>
+</div>
+<p>更多详细内容可以参考<span class="heti-skip"><span class="heti-spacing"> </span>U-Net<span class="heti-spacing"> </span></span>原论文<a href="https://arxiv.org/abs/1505.04597"><span><span class="heti-spacing"> </span>U-Net: Convolutional Networks for Biomedical Image Segmentation</span></a>。</p>
+<h3 id="_5">数据集</h3>
+<h4 id="mnist"><span>MNIST<span class="heti-spacing"> </span></span>手写数字数据集</h4>
+<p><span>MNIST<span class="heti-spacing"> </span></span>数据集<span class="heti-skip"><span class="heti-spacing"> </span>(Mixed National Institute of Standards and Technology database)<span class="heti-spacing"> </span></span>是美国国家标准与技术研究院收集整理的大型手写数字数据库，包含<span class="heti-skip"><span class="heti-spacing"> </span>60,000<span class="heti-spacing"> </span></span>个示例的训练集以及<span class="heti-skip"><span class="heti-spacing"> </span>10,000<span class="heti-spacing"> </span></span>个示例的测试集。</p>
+<div style="text-align:center;">
+<img alt="How to Train a Model with MNIST dataset | by Abdullah Furkan Özbek | Medium" src="../graph/MNIST.jpeg" style="margin: 0 auto; zoom: 50%;"/>
+</div>
+<p>一般给出的<span class="heti-skip"><span class="heti-spacing"> </span>MNIST<span class="heti-spacing"> </span></span>数据集下载链接为<a href="http://yann.lecun.com/exdb/mnist/index.html"><span><span class="heti-spacing"> </span>http://yann.lecun.com/exdb/mnist/index.html</span></a>，然而目前需要登录验证。建议使用<span class="heti-skip"><span class="heti-spacing"> </span>4.1.1<span class="heti-spacing"> </span></span>中<span class="heti-skip"><span class="heti-spacing"> </span>torchvision.datasets<span class="heti-spacing"> </span></span>的方法准备该数据集。 </p>
+<h4 id="carvana"><span>Carvana<span class="heti-spacing"> </span></span>数据集</h4>
+<p><a href="https://www.kaggle.com/competitions/carvana-image-masking-challenge/data"><span>Carvana<span class="heti-spacing"> </span></span>数据集</a> 是<a href="https://www.kaggle.com/"><span class="heti-skip"><span class="heti-spacing"> </span>kaggle<span class="heti-spacing"> </span></span></a>上的一个语义分割竞赛数据集，目标是实现对汽车的分割。</p>
+<div style="text-align:center;">
+<img alt="carvana_graphics" src="../graph/carvana_graphics.png" style="margin: 0 auto; zoom: 60%;"/>
+</div>
+<p>根据<span class="heti-skip"><span class="heti-spacing"> </span>Carvana<span class="heti-spacing"> </span></span>数据集的划分，其训练集包含<span class="heti-skip"><span class="heti-spacing"> </span>5088<span class="heti-spacing"> </span></span>张汽车图片<span class="heti-skip"><span class="heti-spacing"> </span>(.jpg)<span class="heti-spacing"> </span></span>和对应的掩码<span><span class="heti-spacing"> </span>(mask, .gif)</span>，掩码可以认为是<span class="heti-skip"><span class="heti-spacing"> </span>0-1<span class="heti-spacing"> </span></span>的，表示图片上每个像素是否属于汽车。因此这个问题可以处理成逐像素的二分类问题。</p>
+<p>不要求下载该数据集进行训练，将提供已在训练集上训练好的模型。</p>
+<h2 id="_6">实验步骤</h2>
+<h3 id="lenet-5_1"><span>LeNet-5<span class="heti-spacing"> </span></span>训练</h3>
+<h4 id="_7">数据准备</h4>
+<p>建议利用 <code>torchvision</code> 提供的 <code>torchvision.datasets</code> 方法导入数据，<code>torchvision.datasets</code> 所提供的接口十分方便，之后你可以用 <code>torch.utils.data.DataLoader</code> 给你的模型加载数据。</p>
+<p>幸运的是，本次实验需要用到的 <code>MNIST</code> 数据集可用 <code>torchvision.datasets</code> 导入，下面对一些你可能会用到的参数简单加以说明</p>
+<div class="admonition tip">
+<p class="admonition-title">请在清楚参数含义后调用它们</p>
+</div>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># MNIST</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="n">torchvision</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">MNIST</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>一些重要的参数说明：</p>
+<ul>
+<li><code>root</code>：数据集根目录，在<span class="heti-skip"><span class="heti-spacing"> </span>MNIST<span class="heti-spacing"> </span></span>中是 <code>processed/training.pt</code> 和 <code>processed/test.pt</code> 的主目录</li>
+<li><code>train</code>：<code>True</code> 代表训练集，<code>False</code> 代表测试集</li>
+<li><code>transform</code> 和 <code>target_transform</code>：分别是对图像和<span class="heti-skip"><span class="heti-spacing"> </span>label<span class="heti-spacing"> </span></span>的转换操作</li>
+<li><code>download</code>：若为 <code>True</code> 则下载数据集并放到 <code>root</code> 所指定的目录中，否则直接尝试从 <code>root</code> 目录中读取</li>
+</ul>
+<p>你可以在<a href="https://pytorch.org/vision/0.8/datasets.html">这里</a>获取更加详细的说明</p>
+<h4 id="_8">模型编写</h4>
+<h5 id="_9">网络结构</h5>
+<p><code>PyTorch</code> 提供了许多种定义模型的方式，最常用的一种是将网络结构以类保存，你应当首先继承<a href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module"><span><span class="heti-spacing"> </span>torch.nn.Module</span></a>，并实现正向传播的 <code>forward</code> 函数，<span>(<span class="heti-spacing"> </span></span>为什么不用定义反向传播函数呢？因为你继承的 <code>nn.Module</code> 就是干这个事情的<span><span class="heti-spacing"> </span>)</span>。</p>
+<p>下面为网络结构的一个<span><span class="heti-spacing"> </span>sample</span>（但显然这样的网络并不能用于本次<span><span class="heti-spacing"> </span>Lab</span><heti-adjacent class="heti-adjacent-half">）</heti-adjacent>，本次实验中你<strong>需要自定义你的网络结构</strong>，以完成我们的分类任务：</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a>        <span class="nb">super</span><span class="p">(</span><span class="n">Model</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span> <span class="c1"># 利用参数初始化父类</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9"></a>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11"></a>        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12"></a>        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</span></code></pre></div></td></tr></table></div>
+<p>当然，你需要实例化你的模型，可以直接对模型打印以查看结构</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>网络结构编写中一个很大的难点在于每一步的<span class="heti-skip"><span class="heti-spacing"> </span>tensor shape<span class="heti-spacing"> </span></span>需要匹配，请仔细检查你的代码来确保此部分的正确性。</p>
+<h5 id="_10">损失函数</h5>
+<p>常见的损失函数都被定义在了 <code>torch.nn</code>中，你可以在训练过程开始前将其实例化，并在训练时调用，例如：</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="n">criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<h5 id="_11">正向传播</h5>
+<p>正向传播是指对神经网络沿着从输入层到输出层的顺序，依次计算并存储模型的中间变量（包括输出<heti-adjacent class="heti-adjacent-half">）</heti-adjacent>。
+正向传播的过程在 <code>forward</code>中定义，对于模型实例，可以直接利用输入输出得到模型预测的结果。</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<h5 id="_12">反向传播</h5>
+<p>反向传播（Backpropagation，BP）是“误差反向传播”的简称，是一种与最优化方法（如梯度下降法）结合使用的，用来训练人工神经网络的常见方法。该方法对网络中所有权重计算损失函数的梯度。这个梯度会反馈给最优化方法，用来更新权值以最小化损失函数。</p>
+<p>在计算过模型的<span class="heti-skip"><span class="heti-spacing"> </span>loss<span class="heti-spacing"> </span></span>之后，可以利用 <code>loss.backward()</code> 计算反向传播的梯度，梯度会被直接储存在 <code>requires_grad=True</code> 的节点中，不过此时节点的权重暂时不会更新，因此可以做到梯度的累加。</p>
+<h5 id="_13">优化器</h5>
+<p>常用的优化器都被定义在了 <code>torch.optim</code> 中，为了使用优化器，你需要构建一个<span class="heti-skip"><span class="heti-spacing"> </span>optimizer<span class="heti-spacing"> </span></span>对象。这个对象能够保持当前参数状态并基于计算得到的梯度进行参数更新。你需要给它一个包含了需要优化的参数（必须都是<span class="heti-skip"><span class="heti-spacing"> </span>Variable<span class="heti-spacing"> </span></span>对象）的<span><span class="heti-spacing"> </span>iterable</span>。然后，你可以设置<span class="heti-skip"><span class="heti-spacing"> </span>optimizer<span class="heti-spacing"> </span></span>的参数选项，比如学习率，权重衰减，例如：</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">([</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>所有的<span class="heti-skip"><span class="heti-spacing"> </span>optimizer<span class="heti-spacing"> </span></span>都实现了<span class="heti-skip"><span class="heti-spacing"> </span>step()<span class="heti-spacing"> </span></span>方法，这个方法会更新所有的参数。或许你会在反向传播后用到它。</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<p>需要注意的是，在反向传播前，如果你不希望梯度累加，请使用下面的代码将梯度清零。</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<h4 id="_14">训练过程</h4>
+<p>前文中已经定义了网络结构、损失函数、优化器，至此，一个较为完整的训练过程如下，需要注意的是，你的训练过程要不断从 <code>DataLoader</code> 中取出数据。</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span>
+<span class="normal"><a href="#__codelineno-11-12">12</a></span>
+<span class="normal"><a href="#__codelineno-11-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="n">criterion</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">MSELoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="s1">'sum'</span><span class="p">)</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30000</span><span class="p">):</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4"></a>    <span class="c1"># Forward pass: Compute predicted y by passing x to the model</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5"></a>    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6"></a>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7"></a>    <span class="c1"># Compute and print loss</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8"></a>    <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9"></a>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10"></a>    <span class="c1"># Zero gradients, perform a backward pass, and update the weights.</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11"></a>    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12"></a>    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13"></a>    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<h4 id="_15">测试过程</h4>
+<p>一般来说，神经网络会多次在训练集上进行训练，一次训练称之为一个<span><span class="heti-spacing"> </span>epoch</span>。每个<span class="heti-skip"><span class="heti-spacing"> </span>epoch<span class="heti-spacing"> </span></span>结束后，我们会在测试集上进行测试，以评估模型的性能。在测试过程中，我们不需要计算梯度也不可以计算梯度（思考为什么<heti-adjacent class="heti-adjacent-half">）</heti-adjacent>，此时可以使用 <code>torch.no_grad</code> 来实现这一点。</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a>    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a>    <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<h4 id="tips">Tips</h4>
+<ul>
+<li><code>nn.functional.relu</code>  （简记为 <code>F.relu</code> ）和 <code>nn.ReLU</code> 略有不同，区别在于前者作为一个函数调用，而后者作为一个层结构，必须添加到 <code>nn.Module</code> 容器中才能使用，两者实现的功能一样，在 <code>PyTorch</code> 中，<code>nn.X</code> 都有对应的函数版本 <code>F.X</code>。</li>
+<li>除了利用继承 <code>nn.Module</code> 来建立网络，不推荐但可以使用<code>nn.ModuleList</code><span><span class="heti-spacing"> </span>,</span> <code>nn.ModuleDict</code>，推荐使用 <code>nn.Sequential</code>直接定义模型</li>
+<li>
+<p>你可以定义如下的 <code>device</code> 变量，以便你的模型在没有<span class="heti-skip"><span class="heti-spacing"> </span>GPU<span class="heti-spacing"> </span></span>环境下也可以测试：</p>
+<div class="language-Python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span>
+<span class="normal"><a href="#__codelineno-13-3">3</a></span>
+<span class="normal"><a href="#__codelineno-13-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="n">some_data</span> <span class="o">=</span> <span class="n">some_data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+</li>
+<li>
+<p>你不必严格按照原版<span class="heti-skip"><span class="heti-spacing"> </span>LeNet-5<span class="heti-spacing"> </span></span>的网络结构来实现，包括超参数、优化器的选择不限，但是你需要保证你的网络结构是合理的，且能够完成我们的分类任务，<strong>最终的测试集准确率需要达到<span class="heti-skip"><span class="heti-spacing"> </span>98%<span class="heti-spacing"> </span></span>以上</strong><heti-adjacent class="heti-adjacent-half">。</heti-adjacent>（实际上原版<span class="heti-skip"><span class="heti-spacing"> </span>LeNet<span class="heti-spacing"> </span></span>可以轻松达到这个准确率，使用更加现代的结构和优化器，你可以达到更高的准确率）</p>
+</li>
+<li>不必过度关注准确率和<span><span class="heti-spacing"> </span>loss</span>，评分将更关注有意义的探索过程记录而不是性能数值。</li>
+</ul>
+<h3 id="u-net_1"><span>U-Net<span class="heti-spacing"> </span></span>补全与测试</h3>
+<h4 id="u-net_2"><span>U-Net<span class="heti-spacing"> </span></span>结构解读</h4>
+<div style="text-align:center;">
+<img alt="U-Net-explain" src="../graph/U-Net-explain.jpg" style="margin: 0 auto;"/>
+</div>
+<p>在<span class="heti-skip"><span class="heti-spacing"> </span>U-Net<span class="heti-spacing"> </span></span>原论文<a href="https://arxiv.org/abs/1505.04597"><span class="heti-skip"><span class="heti-spacing"> </span>U-Net: Convolutional Networks for Biomedical Image Segmentation<span class="heti-spacing"> </span></span></a>中：</p>
+<ul>
+<li>左侧向下的结构被称为<span><span class="heti-spacing"> </span>Contracting Path</span>，由通道数不断增加的卷积层和池化层组成</li>
+<li>右侧向上的结构被称为<span><span class="heti-spacing"> </span>Expanding Path</span>，由通道数不断减少的卷积层和上采样层（反卷积层）组成</li>
+<li>在<span class="heti-skip"><span class="heti-spacing"> </span>Expanding Path<span class="heti-spacing"> </span></span>中，每次上采样层都会将<span class="heti-skip"><span class="heti-spacing"> </span>Contracting Path<span class="heti-spacing"> </span></span>中对应的特征图与自身的特征图进行拼接，这样可以保证<span class="heti-skip"><span class="heti-spacing"> </span>Expanding Path<span class="heti-spacing"> </span></span>中的每一层都能够利用<span class="heti-skip"><span class="heti-spacing"> </span>Contracting Path<span class="heti-spacing"> </span></span>中的信息</li>
+</ul>
+<h4 id="_16">网络补全</h4>
+<p>要求完成<a href="../code/unet.py"><span class="heti-skip"><span class="heti-spacing"> </span>unet.py<span class="heti-spacing"> </span></span></a>中全部的 <code>TODO</code>，使得所提供的训练好的模型可以被正确加载。</p>
+<p>整体上来看，需要完成的内容为 <code>UNet</code> 类 <code>__init__</code> 中部分卷积层的定义，以及 <code>forward</code> 函数中的<span class="heti-skip"><span class="heti-spacing"> </span>Contracting Path<span class="heti-spacing"> </span></span>和<span class="heti-skip"><span class="heti-spacing"> </span>Expanding Path<span class="heti-spacing"> </span></span>的前递。不过，<code>UNet</code> 类 <code>__init__</code> 补全过程中还需要实现 <code>CropAndConcat</code> 类。</p>
+<div class="admonition warning">
+<p class="admonition-title">以下代码只是展示一个框架便于纵观全部内容，请点击文档中<a href="../code/unet.py"><span class="heti-skip"><span class="heti-spacing"> </span>unet.py<span class="heti-spacing"> </span></span></a>文字所对应的链接下载包含更多提示的模板进行网络补全</p>
+</div>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-14-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-14-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-14-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-14-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-14-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-14-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-14-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-14-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-14-10">10</a></span>
+<span class="normal"><a href="#__codelineno-14-11">11</a></span>
+<span class="normal"><a href="#__codelineno-14-12">12</a></span>
+<span class="normal"><a href="#__codelineno-14-13">13</a></span>
+<span class="normal"><a href="#__codelineno-14-14">14</a></span>
+<span class="normal"><a href="#__codelineno-14-15">15</a></span>
+<span class="normal"><a href="#__codelineno-14-16">16</a></span>
+<span class="normal"><a href="#__codelineno-14-17">17</a></span>
+<span class="normal"><a href="#__codelineno-14-18">18</a></span>
+<span class="normal"><a href="#__codelineno-14-19">19</a></span>
+<span class="normal"><a href="#__codelineno-14-20">20</a></span>
+<span class="normal"><a href="#__codelineno-14-21">21</a></span>
+<span class="normal"><a href="#__codelineno-14-22">22</a></span>
+<span class="normal"><a href="#__codelineno-14-23">23</a></span>
+<span class="normal"><a href="#__codelineno-14-24">24</a></span>
+<span class="normal"><a href="#__codelineno-14-25">25</a></span>
+<span class="normal"><a href="#__codelineno-14-26">26</a></span>
+<span class="normal"><a href="#__codelineno-14-27">27</a></span>
+<span class="normal"><a href="#__codelineno-14-28">28</a></span>
+<span class="normal"><a href="#__codelineno-14-29">29</a></span>
+<span class="normal"><a href="#__codelineno-14-30">30</a></span>
+<span class="normal"><a href="#__codelineno-14-31">31</a></span>
+<span class="normal"><a href="#__codelineno-14-32">32</a></span>
+<span class="normal"><a href="#__codelineno-14-33">33</a></span>
+<span class="normal"><a href="#__codelineno-14-34">34</a></span>
+<span class="normal"><a href="#__codelineno-14-35">35</a></span>
+<span class="normal"><a href="#__codelineno-14-36">36</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">UNet</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3"></a>        <span class="o">...</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4"></a>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5"></a>        <span class="c1"># TODO: Double convolution layers for the contracting path.</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6"></a>        <span class="o">...</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7"></a>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8"></a>        <span class="c1"># Down sampling layers for the contracting path</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9"></a>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10"></a>        <span class="c1"># TODO: The two convolution layers at the lowest resolution (the bottom of the U).</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11"></a>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12"></a>        <span class="c1"># Up sampling layers for the expansive path.</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13"></a>
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14"></a>        <span class="c1"># TODO: Double convolution layers for the expansive path.</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15"></a>        <span class="o">...</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16"></a>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17"></a>        <span class="c1"># Crop and concatenate layers for the expansive path.</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18"></a>        <span class="c1"># TODO: Implement class CropAndConcat starting from line 6</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19"></a>        <span class="o">...</span>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20"></a>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21"></a>        <span class="c1"># TODO: Final 1*1 convolution layer to produce the output</span>
+</span><span id="__span-14-22"><a id="__codelineno-14-22" name="__codelineno-14-22"></a>        <span class="o">...</span>
+</span><span id="__span-14-23"><a id="__codelineno-14-23" name="__codelineno-14-23"></a>
+</span><span id="__span-14-24"><a id="__codelineno-14-24" name="__codelineno-14-24"></a>
+</span><span id="__span-14-25"><a id="__codelineno-14-25" name="__codelineno-14-25"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+</span><span id="__span-14-26"><a id="__codelineno-14-26" name="__codelineno-14-26"></a><span class="w">        </span><span class="sd">"""</span>
+</span><span id="__span-14-27"><a id="__codelineno-14-27" name="__codelineno-14-27"></a><span class="sd">        :param x: input image</span>
+</span><span id="__span-14-28"><a id="__codelineno-14-28" name="__codelineno-14-28"></a><span class="sd">        """</span>
+</span><span id="__span-14-29"><a id="__codelineno-14-29" name="__codelineno-14-29"></a>        <span class="c1"># TODO: Contracting path</span>
+</span><span id="__span-14-30"><a id="__codelineno-14-30" name="__codelineno-14-30"></a>        <span class="o">...</span>
+</span><span id="__span-14-31"><a id="__codelineno-14-31" name="__codelineno-14-31"></a>
+</span><span id="__span-14-32"><a id="__codelineno-14-32" name="__codelineno-14-32"></a>        <span class="c1"># Two 3*3 convolutional layers at the bottom of the U-Net</span>
+</span><span id="__span-14-33"><a id="__codelineno-14-33" name="__codelineno-14-33"></a>        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">middle_conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-14-34"><a id="__codelineno-14-34" name="__codelineno-14-34"></a>
+</span><span id="__span-14-35"><a id="__codelineno-14-35" name="__codelineno-14-35"></a>        <span class="c1"># TODO: Expansive path</span>
+</span><span id="__span-14-36"><a id="__codelineno-14-36" name="__codelineno-14-36"></a>        <span class="o">...</span>
+</span></code></pre></div></td></tr></table></div>
+<h5 id="__init__"><code>__init__</code> 中的卷积层定义</h5>
+<ul>
+<li>通道数的变化已经在前面的图中进行了标注。和原论文不同，训练时<span class="heti-skip"><span class="heti-spacing"> </span>final_conv<span class="heti-spacing"> </span></span>的输出通道改成了<span><span class="heti-spacing"> </span>1</span>，但是在通用的网络结构中就是 <code>out_channels</code></li>
+<li><span>down_conv, mid_conv<span class="heti-spacing"> </span></span>和<span class="heti-skip"><span class="heti-spacing"> </span>up_conv<span class="heti-spacing"> </span></span>都是由两个卷积层组成，每个卷积层都是<span class="heti-skip"><span class="heti-spacing"> </span><span class="arithmatex">\(3\times 3\)</span><span class="heti-spacing"> </span></span>的卷积核，<span>padding<span class="heti-spacing"> </span></span>为<span><span class="heti-spacing"> </span><span class="arithmatex">\(1\)</span></span>，<span>stride<span class="heti-spacing"> </span></span>为<span><span class="heti-spacing"> </span><span class="arithmatex">\(1\)</span></span>。每个卷积层后都有一个<span class="heti-skip"><span class="heti-spacing"> </span>ReLU<span class="heti-spacing"> </span></span>激活函数，整体顺序为<span><span class="heti-spacing"> </span>Conv2d-Relu-Conv2d-Relu</span></li>
+<li><span>final_conv<span class="heti-spacing"> </span></span>是一个<span class="heti-skip"><span class="heti-spacing"> </span><span class="arithmatex">\(1\times 1\)</span><span class="heti-spacing"> </span></span>的卷积层，<span>padding<span class="heti-spacing"> </span></span>为<span><span class="heti-spacing"> </span><span class="arithmatex">\(0\)</span></span>，<span>stride<span class="heti-spacing"> </span></span>为<span><span class="heti-spacing"> </span><span class="arithmatex">\(1\)</span></span>，没有激活函数</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">只需要在有 <code>TODO</code> 的地方填写，在 <code>nn.Sequential</code> 的括号中正常填写<code>nn.Conv2d</code><span class="heti-skip"><span class="heti-spacing"> </span>,<span class="heti-spacing"> </span></span><code>nn.ReLU</code>即可。不要自定义网络类，避免模型因为层命名不一致而加载失败。</p>
+</div>
+<h5 id="cropandconcat"><code>CropAndConcat</code> 类的实现</h5>
+<p><code>CropAndConcat</code> 类的作用是将<span class="heti-skip"><span class="heti-spacing"> </span>Contracting Path<span class="heti-spacing"> </span></span>中的特征图与<span class="heti-skip"><span class="heti-spacing"> </span>Expanding Path<span class="heti-spacing"> </span></span>中的特征图进行拼接，以保证<span class="heti-skip"><span class="heti-spacing"> </span>Expanding Path<span class="heti-spacing"> </span></span>中的每一层都能够利用<span class="heti-skip"><span class="heti-spacing"> </span>Contracting Path<span class="heti-spacing"> </span></span>中的信息。</p>
+<ul>
+<li>需要使用 <code>torchvision.transforms.functional.center_crop(...)</code> 对<span class="heti-skip"><span class="heti-spacing"> </span>Contracting Path<span class="heti-spacing"> </span></span>中的特征图进行裁剪，以保证尺寸一致能够成功拼接</li>
+<li><code>b, c, h, w</code> 四个变量并不是都会用到，但是你需要知道它们的含义，便于正确使用 <code>center_crop(...)</code><ul>
+<li><code>b</code>：batch size</li>
+<li><code>c</code>：channel</li>
+<li><code>h</code>：height</li>
+<li><code>w</code>：width</li>
+</ul>
+</li>
+<li>请自行搜索查找 <code>torch.cat()</code> 的用法，使得能符合原论文中的拼接方式</li>
+<li>与图中相反，实际拼接的顺序为<span class="heti-skip"><span class="heti-spacing"> </span>Expanding Path<span class="heti-spacing"> </span></span>中的<span class="heti-skip"><span class="heti-spacing"> </span>feature map<span class="heti-spacing"> </span></span>在左，<span>Contracting Path<span class="heti-spacing"> </span></span>中的<span class="heti-skip"><span class="heti-spacing"> </span>feature map<span class="heti-spacing"> </span></span>在右</li>
+<li>这里的代码量非常小，基本两三行，不要写复杂了</li>
+</ul>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-15-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-15-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-15-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-15-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-15-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-15-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-15-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-15-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-15-10">10</a></span>
+<span class="normal"><a href="#__codelineno-15-11">11</a></span>
+<span class="normal"><a href="#__codelineno-15-12">12</a></span>
+<span class="normal"><a href="#__codelineno-15-13">13</a></span>
+<span class="normal"><a href="#__codelineno-15-14">14</a></span>
+<span class="normal"><a href="#__codelineno-15-15">15</a></span>
+<span class="normal"><a href="#__codelineno-15-16">16</a></span>
+<span class="normal"><a href="#__codelineno-15-17">17</a></span>
+<span class="normal"><a href="#__codelineno-15-18">18</a></span>
+<span class="normal"><a href="#__codelineno-15-19">19</a></span>
+<span class="normal"><a href="#__codelineno-15-20">20</a></span>
+<span class="normal"><a href="#__codelineno-15-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">CropAndConcat</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">    </span><span class="sd">"""</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="sd">    ### Crop and Concatenate the feature map</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4"></a>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="sd">    Crop the feature map from the contracting path to the size of the current feature map</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="sd">    """</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">contracting_x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="w">        </span><span class="sd">"""</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="sd">        :param x: current feature map in the expansive path</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10"></a><span class="sd">        :param contracting_x: corresponding feature map from the contracting path</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11"></a><span class="sd">        """</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12"></a>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13"></a>        <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14"></a>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15"></a>        <span class="c1"># TODO: Concatenate the feature maps</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16"></a>        <span class="c1"># use torchvision.transforms.functional.center_crop(...)</span>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17"></a>        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18"></a>            <span class="c1"># ...</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19"></a>        <span class="p">)</span>
+</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20"></a>
+</span><span id="__span-15-21"><a id="__codelineno-15-21" name="__codelineno-15-21"></a>        <span class="k">return</span> <span class="n">x</span>
+</span></code></pre></div></td></tr></table></div>
+<h5 id="unet-forward"><code>UNet</code> 类中 <code>forward</code> 的实现</h5>
+<p>前面如果都实现正确，这里是比较简单的，相当于对着图连线。注意在<span class="heti-skip"><span class="heti-spacing"> </span>Contracting Path<span class="heti-spacing"> </span></span>中保留中间结果，在<span class="heti-skip"><span class="heti-spacing"> </span>Expanding Path<span class="heti-spacing"> </span></span>中<span class="heti-skip"><span class="heti-spacing"> </span>Crop and Concat<span class="heti-spacing"> </span></span>时可以使用。</p>
+<h5 id="_17">模型加载测试</h5>
+<p>提供模型文件 <code>model.pth</code>，你可以用以下的代码测试你补全的网络是否能成功加载该模型。</p>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="#__codelineno-16-12">12</a></span>
+<span class="normal"><a href="#__codelineno-16-13">13</a></span>
+<span class="normal"><a href="#__codelineno-16-14">14</a></span>
+<span class="normal"><a href="#__codelineno-16-15">15</a></span>
+<span class="normal"><a href="#__codelineno-16-16">16</a></span>
+<span class="normal"><a href="#__codelineno-16-17">17</a></span>
+<span class="normal"><a href="#__codelineno-16-18">18</a></span>
+<span class="normal"><a href="#__codelineno-16-19">19</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">unet</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNet</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4"></a>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6"></a>    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">'Predict masks from input images'</span><span class="p">)</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7"></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">'--model'</span><span class="p">,</span> <span class="s1">'-m'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">'model.pth'</span><span class="p">,</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8"></a>                        <span class="n">help</span><span class="o">=</span><span class="s1">'Specify the file in which the model is stored'</span><span class="p">)</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9"></a>    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10"></a>    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">'cuda'</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">'cpu'</span><span class="p">)</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11"></a>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Loading model </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Using device </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14"></a>
+</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15"></a>    <span class="n">model</span> <span class="o">=</span> <span class="n">UNet</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16"></a>    <span class="n">state_dict</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17"></a>    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">state_dict</span><span class="p">)</span>
+</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18"></a>
+</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="s1">'Model loaded'</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<p>例如，将该测试代码写在 <code>try.py</code>，并将其和 <code>unet.py</code> 放在同一目录下，用 <code>--model</code> 指定 <code>model.pth</code> 的路径，以模型文件和代码在同一目录为例，则可以运行</p>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1"></a>python<span class="w"> </span>try.py<span class="w"> </span>--model<span class="w"> </span>model.pth
+</span></code></pre></div></td></tr></table></div>
+<p>如果输出
+</p><div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span>
+<span class="normal"><a href="#__codelineno-18-2">2</a></span>
+<span class="normal"><a href="#__codelineno-18-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1"></a>Loading model model.pth
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2"></a>Using device cpu
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3"></a>Model loaded
+</span></code></pre></div></td></tr></table></div>
+<p>则说明你的网络补全正确。当然，第一二行的输出不同情况可能不同，我们关注的重心在于第三行输出<span><span class="heti-spacing"> </span>"Model loaded"</span>。</p>
+<h4 id="_18">单图推断测试</h4>
+<p>要求加载提供的模型 <code>model.pth</code>，对提供的<a href="../graph/infer.jpg">单张汽车图片</a>的<span class="heti-skip"><span class="heti-spacing"> </span>mask<span class="heti-spacing"> </span></span>进行推断，有如下的关键点：</p>
+<ul>
+<li>使用 <code>Image.open()</code> 读入的单张图片需要利用 <code>torchvision.transforms</code> 进行适当的预处理。<ul>
+<li><span>Resize<span class="heti-spacing"> </span></span>为<span><span class="heti-spacing"> </span>572</span></li>
+<li>转换为<span><span class="heti-spacing"> </span>Tensor</span></li>
+</ul>
+</li>
+<li>可能需要用到 <code>torch.nn.functional.interpolate</code> 进行插值，和图片尺寸匹配</li>
+<li>模型的输入输出都具有 <code>[B, C, H, W]</code> 的格式</li>
+<li>模型直接产生的输出是一个<span><span class="heti-spacing"> </span>score</span>。首先需要用<span class="heti-skip"><span class="heti-spacing"> </span>sigmoid<span class="heti-spacing"> </span></span>进行处理，然后使用一定的阈值来将其转换为<span class="heti-skip"><span class="heti-spacing"> </span>0-1<span class="heti-spacing"> </span></span>的<span><span class="heti-spacing"> </span>mask</span></li>
+</ul>
+<p>在这里简单提供给定图片 <code>img</code>、预测的掩码 <code>mask</code> 和保存图片名 <code>filename</code> 而将图片和预测的掩码以 <code>filename</code> 保存的代码：</p>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-19-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-19-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-19-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-19-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-19-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-19-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-19-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-19-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-19-10">10</a></span>
+<span class="normal"><a href="#__codelineno-19-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2"></a>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">plot_img_and_mask</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4"></a>    <span class="n">classes</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5"></a>    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">classes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6"></a>    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Input image'</span><span class="p">)</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7"></a>    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8"></a>    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Mask'</span><span class="p">)</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9"></a>    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10"></a>    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11"></a>    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<p>效果如下图所示：</p>
+<div style="text-align:center;">
+<img alt="U-Net-viz" src="../graph/U-Net-viz.png" style="margin: 0 auto;"/>
+</div>
+<h2 id="_19">实验任务与要求</h2>
+<div class="admonition warning">
+<p class="admonition-title">不允许直接使用各种深度学习开发工具已训练好的网络结构与参数</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">参考文章、代码需在报告中列出，并体现出你的理解，否则一经查出视为抄袭</p>
+</div>
+<ol>
+<li>LeNet-5：<ol>
+<li>使用 <code>PyTorch</code> 实现最基本的卷积神经网络<span><span class="heti-spacing"> </span>LeNet-5</span>，并在<span class="heti-skip"><span class="heti-spacing"> </span>MNIST<span class="heti-spacing"> </span></span>数据集上进行训练</li>
+<li>在测试集上进行测试，获得识别准确率，需要达到<span class="heti-skip"><span class="heti-spacing"> </span>98%<span class="heti-spacing"> </span></span>以上</li>
+<li>由于<span class="heti-skip"><span class="heti-spacing"> </span>LeNet-5<span class="heti-spacing"> </span></span>太过经典、参考资料过多，代码的清晰程度和适当的原创注释也将是基本评分项</li>
+<li><span>(bonus)<span class="heti-spacing"> </span></span>对超参、优化器、网络结构等进行<strong>有意义</strong>的探索实验，将给予适当的<span><span class="heti-spacing"> </span>bonus</span>。不鼓励无意义的内卷堆实验，评分时将酌情考虑。</li>
+</ol>
+</li>
+<li>U-Net：<ol>
+<li>提供的文件：<a href="../code/unet.py">unet.py</a>、<a href="../code/try.py">try.py</a>、<a href="../graph/infer.jpg">infer.jpg</a>，<span>model.pth<span class="heti-spacing"> </span></span>可以从<a href="https://courses.zju.edu.cn">学在浙大</a>或钉钉群下载</li>
+<li>补全<a href="../code/unet.py"><span class="heti-skip"><span class="heti-spacing"> </span>unet.py<span class="heti-spacing"> </span></span></a>中的 <code>TODO</code>，使得所提供的训练好的模型可以被正确加载</li>
+<li>利用所提供的模型，推断所提供的单张汽车图片<span class="heti-skip"><span class="heti-spacing"> </span>(<span class="heti-spacing"> </span></span><a href="../graph/infer.jpg"><span class="heti-skip"><span class="heti-spacing"> </span>infer.jpg<span class="heti-spacing"> </span></span></a><span class="heti-skip"><span class="heti-spacing"> </span>)<span class="heti-spacing"> </span></span>的<span><span class="heti-spacing"> </span>mask</span></li>
+</ol>
+</li>
+<li>作为一个探索，本次作业分数构成按如下划分：<ol>
+<li><span>LeNet<span class="heti-spacing"> </span></span>基本要求：50</li>
+<li><span>U-Net<span class="heti-spacing"> </span></span>基本要求：50</li>
+<li>LeNet bonus：5</li>
+<li>总分为该三部分之和，<span>100<span class="heti-spacing"> </span></span>分封顶</li>
+</ol>
+</li>
+<li><strong>截止时间：<span>2024<span class="heti-spacing"> </span></span>年<span class="heti-skip"><span class="heti-spacing"> </span>1<span class="heti-spacing"> </span></span>月<span class="heti-skip"><span class="heti-spacing"> </span>2<span class="heti-spacing"> </span></span>日上午</strong>，详见<a href="https://courses.zju.edu.cn">学在浙大</a></li>
+<li>你需要提交：<ol>
+<li>全部代码</li>
+<li>实验报告，除了模板要求之外，还需要包含：<ol>
+<li>对于<span><span class="heti-spacing"> </span>LeNet-5</span>，给出<strong>模型的损失曲线、识别准确率曲线</strong>等图表。可以利用<span class="heti-skip"><span class="heti-spacing"> </span>tensorboard<span class="heti-spacing"> </span></span>可视化训练过程并直接在其中截图，可以参考<a href="https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html"><span class="heti-skip"><span class="heti-spacing"> </span>PyTorch<span class="heti-spacing"> </span></span></a>的官方教程完成配置。</li>
+<li>对于<span><span class="heti-spacing"> </span>LeNet-5</span>，你需要写明测试集上的<strong>识别正确率</strong></li>
+<li>对于<span><span class="heti-spacing"> </span>U-Net</span>，给出 <code>plot_img_and_mask</code> 函数生成的图片<span class="heti-skip"><span class="heti-spacing"> </span>(<span class="heti-spacing"> </span></span><a href="../graph/infer.jpg"><span class="heti-skip"><span class="heti-spacing"> </span>infer.jpg<span class="heti-spacing"> </span></span></a>和所预测的<span><span class="heti-spacing"> </span>mask)</span></li>
+<li><span>U-Net<span class="heti-spacing"> </span></span>是原创实验，欢迎在报告感想部分提供反馈</li>
+</ol>
+</li>
+<li>代码应单独打包为压缩文件，命名为 <code>学号-姓名-CVHW4</code> 的格式。实验报告应当单独上传附件，保证可以在网页直接打开实验报告进行预览，命名任意。</li>
+</ol>
+</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title"><span>Deadline<span class="heti-spacing"> </span></span>之后交：按<span class="heti-skip"><span class="heti-spacing"> </span>80%<span class="heti-spacing"> </span></span>分数计算成绩</p>
+</div>
+<h2 id="_20">参考资料</h2>
+<ul>
+<li><a href="https://pytorch.org/"><span>PyTorch<span class="heti-spacing"> </span></span>框架</a></li>
+<li><a href="https://www.pytorchlightning.ai/"><span>PyTorch Lightning<span class="heti-spacing"> </span></span>框架</a></li>
+<li><a href="http://yann.lecun.com/exdb/mnist/index.html"><span>MNIST<span class="heti-spacing"> </span></span>数据集</a>（需验证）</li>
+<li><span>LeNet<span class="heti-spacing"> </span></span>原论文<a href="https://ieeexplore.ieee.org/abstract/document/726791"><span><span class="heti-spacing"> </span>Gradient-based learning applied to document recognition</span></a></li>
+<li><a href="https://pytorch.org/docs/stable/notes/extending.html"><span>PyTorch<span class="heti-spacing"> </span></span>扩展</a></li>
+<li><a href="https://d2l.ai/">Dive into Deep Learning</a></li>
+<li><a href="https://www.kaggle.com/competitions/carvana-image-masking-challenge/data"><span>Carvana<span class="heti-spacing"> </span></span>数据集</a></li>
+<li><span>U-Net<span class="heti-spacing"> </span></span>原论文<a href="https://arxiv.org/abs/1505.04597"><span><span class="heti-spacing"> </span>U-Net: Convolutional Networks for Biomedical Image Segmentation</span></a></li>
+</ul>
+<h2 id="acknowledgement">Acknowledgement</h2>
+<p>非常感谢<a href="https://github.com/chiakicage"><span class="heti-skip"><span class="heti-spacing"> </span>chiakicage<span class="heti-spacing"> </span></span></a>为另一门高质量课程编写的实验文档，让我能够在此基础上进行修改，让该实验得以在短期内发布。</p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="页脚" class="md-footer__inner md-grid">
+<a aria-label="上一页: OpenCV Environment" class="md-footer__link md-footer__link--prev" href="../opencv/">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</div>
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                上一页
+              </span>
+<div class="md-ellipsis">
+                OpenCV Environment
+              </div>
+</div>
+</a>
+<a aria-label="下一页: HW5 Learning CNN++" class="md-footer__link md-footer__link--next" href="../hw5/">
+<div class="md-footer__title">
+<span class="md-footer__direction">
+                下一页
+              </span>
+<div class="md-ellipsis">
+                HW5 Learning CNN++
+              </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Copyright © 2023 <a href="https://github.com/ZhouTimeMachine" rel="noopener" target="_blank">ZhouTimeMachine</a>
+</div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "navigation.footer"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+<script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/katex.min.js"></script>
+<script src="../js/katex.js"></script>
+</body>
+</html>
